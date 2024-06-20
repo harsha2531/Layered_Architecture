@@ -1,4 +1,4 @@
-package com.example.layeredarchitecture.model;
+package com.example.layeredarchitecture.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -6,9 +6,18 @@ import java.math.BigDecimal;
 
 
 public class OrderDetailDTO implements Serializable {
+    private String oid;
     private String itemCode;
     private int qty;
     private BigDecimal unitPrice;
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
 
     public OrderDetailDTO() {
     }

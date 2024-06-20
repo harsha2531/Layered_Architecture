@@ -1,12 +1,8 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.dao.CustomerDAOImpl;
-import com.example.layeredarchitecture.dao.ItemDAO;
-import com.example.layeredarchitecture.dao.ItemDAOImpl;
-import com.example.layeredarchitecture.db.DBConnection;
-import com.example.layeredarchitecture.model.CustomerDTO;
-import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.view.tdm.CustomerTM;
+import com.example.layeredarchitecture.dao.custom.ItemDAO;
+import com.example.layeredarchitecture.dao.custom.Impl.ItemDAOImpl;
+import com.example.layeredarchitecture.Entity.Item;
 import com.example.layeredarchitecture.view.tdm.ItemTM;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -83,10 +79,10 @@ public class ManageItemsFormController {
             /*while (rst.next()) {
                 tblItems.getItems().add(new ItemTM(rst.getString("code"), rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand")));
             }*/
-            ArrayList<ItemDTO> itemDTOS = itemDAO.getAllItems();
+            ArrayList<Item> items = itemDAO.getAll();
 
-            for (ItemDTO itemDTO : itemDTOS) {
-                tblItems.getItems().add(new ItemTM(itemDTO.getCode(), itemDTO.getDescription(), itemDTO.getUnitPrice(),itemDTO.getQtyOnHand()));
+            for (Item item : items) {
+                tblItems.getItems().add(new ItemTM(item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand()));
             }
 
         } catch (SQLException e) {
@@ -151,7 +147,7 @@ public class ManageItemsFormController {
             pstm.setString(1, code);
             pstm.executeUpdate();*/
 
-            itemDAO.deleteItem(code);
+            itemDAO.delete(code);
 
 
             tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
@@ -199,7 +195,7 @@ public class ManageItemsFormController {
                 pstm.setBigDecimal(3, unitPrice);
                 pstm.setInt(4, qtyOnHand);
                 pstm.executeUpdate();*/
-                itemDAO.saveItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
+                itemDAO.add(new Item(code, description, unitPrice, qtyOnHand));
 
                 tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
 
@@ -223,7 +219,7 @@ public class ManageItemsFormController {
                 pstm.setString(4, code);
                 pstm.executeUpdate();*/
 
-                itemDAO.update(new ItemDTO(code, description, unitPrice, qtyOnHand));
+                itemDAO.update(new Item(code, description, unitPrice, qtyOnHand));
 
 
                 ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
@@ -249,7 +245,7 @@ public class ManageItemsFormController {
         return pstm.executeQuery().next();*/
 
 
-        boolean exist =  itemDAO.existItem(code);
+        boolean exist =  itemDAO.existId(code);
 
         return exist;
     }
